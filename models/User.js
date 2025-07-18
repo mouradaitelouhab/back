@@ -50,7 +50,7 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: [true, 'L\'email est obligatoire'],
-    unique: true,
+    unique: true, // Keep unique here, this creates the unique index automatically
     trim: true,
     lowercase: true,
     match: [
@@ -142,18 +142,17 @@ const userSchema = new mongoose.Schema({
   toObject: { virtuals: true }
 });
 
-// Index pour optimiser les recherches
-userSchema.index({ email: 1 });
+// Remove duplicate email index line:
+// userSchema.index({ email: 1 });
+
 userSchema.index({ username: 1 });
 userSchema.index({ role: 1 });
 
 // Middleware pour hasher le mot de passe avant la sauvegarde
 userSchema.pre('save', async function(next) {
-  // Ne hasher que si le mot de passe a été modifié
   if (!this.isModified('password')) return next();
 
   try {
-    // Générer un salt et hasher le mot de passe
     const salt = await bcrypt.genSalt(12);
     this.password = await bcrypt.hash(this.password, salt);
     next();
@@ -174,13 +173,12 @@ userSchema.methods.comparePassword = async function(candidatePassword) {
 // Méthode pour obtenir les informations publiques de l'utilisateur
 userSchema.methods.getPublicProfile = function() {
   const userObject = this.toObject();
-  
-  // Supprimer les informations sensibles
+
   delete userObject.password;
   delete userObject.emailVerificationToken;
   delete userObject.passwordResetToken;
   delete userObject.passwordResetExpires;
-  
+
   return userObject;
 };
 
@@ -200,7 +198,7 @@ userSchema.methods.updateLastLogin = function() {
   return this.save();
 };
 
-// Propriété virtuelle pour le nom complet (si on ajoute prénom/nom plus tard)
+// Propriété virtuelle pour le nom complet
 userSchema.virtual('fullName').get(function() {
   return this.firstName && this.lastName ? `${this.firstName} ${this.lastName}` : this.username;
 });
@@ -208,8 +206,6 @@ userSchema.virtual('fullName').get(function() {
 // Middleware pour nettoyer les données avant la suppression
 userSchema.pre('remove', async function(next) {
   try {
-    // Ici, on pourrait supprimer les données associées (commandes, avis, etc.)
-    // Pour l'instant, on laisse cette logique pour plus tard
     console.log(`Suppression de l'utilisateur: ${this.username}`);
     next();
   } catch (error) {
@@ -217,8 +213,6 @@ userSchema.pre('remove', async function(next) {
   }
 });
 
-// Créer et exporter le modèle
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;
-
