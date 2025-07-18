@@ -39,12 +39,7 @@ connectDB();
 app.use(cors({
   origin: [
     'http://localhost:5173',
-    'http://localhost:5174',
-    'http://localhost:5175',
-    'http://localhost:3000',
-    'https://5173-iu5cikd8m359izkdqq3cv-8eb1bbb7.manusvm.computer',
-    'https://5174-iu5cikd8m359izkdqq3cv-8eb1bbb7.manusvm.computer',
-    'https://5175-i1y5im51on47sijiv6r8a-5d94768d.manusvm.computer'
+    'https://frontend2-81g7.onrender.com',
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
