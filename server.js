@@ -32,10 +32,7 @@ connectDB();
 
 // CORS Configuration
 app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'https://frontend2-81g7.onrender.com',
-  ],
+  origin: ['https://frontend2-81g7.onrender.com'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
@@ -113,14 +110,12 @@ app.use((error, req, res, next) => {
 });
 
 // Start Server
-const HOST = process.env.RENDER_EXTERNAL_HOSTNAME || 'localhost';
 const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`
 🚀 Server running!
 📍 Port: ${PORT}
 🌍 Env: ${process.env.NODE_ENV || 'development'}
-🔗 Base: http://${HOST}:${PORT}
-🏥 Health: http://${HOST}:${PORT}/health
+🏥 Health: /health
   `);
 });
 
