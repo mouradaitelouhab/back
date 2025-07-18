@@ -430,4 +430,3 @@ reviewSchema.statics.getProductReviewStats = async function(productId) {
 const Review = mongoose.model('Review', reviewSchema);
 
 module.exports = Review;
-
