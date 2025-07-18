@@ -176,15 +176,18 @@ process.on('uncaughtException', (err) => {
 });
 
 // Démarrage du serveur
+const HOST = process.env.RENDER_EXTERNAL_HOSTNAME || 'localhost';
 const server = app.listen(PORT, '0.0.0.0', () => {
+  const baseURL = `http://${HOST}:${PORT}`;
+
   console.log(`
 🚀 Serveur ALMAS & DIMAS démarré avec succès!
 📍 Port: ${PORT}
 🌍 Environnement: ${process.env.NODE_ENV || 'development'}
-🔗 URL: http://localhost:${PORT}
-📊 Dashboard Admin: http://localhost:${PORT}/api/dashboard/admin
-👤 Dashboard Vendeur: http://localhost:${PORT}/api/dashboard/seller
-🏥 Health Check: http://localhost:${PORT}/health
+🔗 URL: ${baseURL}
+📊 Dashboard Admin: ${baseURL}/api/dashboard/admin
+👤 Dashboard Vendeur: ${baseURL}/api/dashboard/seller
+🏥 Health Check: ${baseURL}/health
   `);
 });
 
@@ -212,4 +215,3 @@ process.on('SIGINT', () => {
 });
 
 module.exports = app;
-
